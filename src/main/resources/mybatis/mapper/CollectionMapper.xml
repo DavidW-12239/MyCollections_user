@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.collections.mapper.CollectionMapper">
+    <insert id="addCollection">
+        insert into collection values(null, #{userId}, #{title}, #{websiteAddress}, #{description}, #{imagePath}, #{owned}, null)
+    </insert>
+    <insert id="addSubCollection">
+        insert into collection values(null, #{userId}, #{title}, #{websiteAddress}, #{description}, #{imagePath}, #{owned}, #{parentCollectionId})
+    </insert>
+    <select id="getCollectionById" resultType="com.collections.pojo.Collection">
+        select * from collection where collectionId = #{collectionId}
+    </select>
+    <select id="getMainCollectionsByUser" resultType="com.collections.pojo.Collection">
+        select * from collection where userId = #{userId} and parentCollectionId is null
+    </select>
+    <select id="getSubCollectionsByCollection" resultType="com.collections.pojo.Collection">
+        select * from collection where parentCollectionId = #{parentCollectionId}
+    </select>
+    <select id="getCollectionsByTitle" resultType="com.collections.pojo.Collection">
+        select * from collection where title Like CONCAT('%',#{title},'%')
+    </select>
+    <update id="updateCollection">
+        update collection set title = #{title}, #{websiteAddress}, description = #{description}, imagePath = #{imagePath}, owned = #{owned}, subCollections = #{subCollections}
+        where collectionId = #{collectionId}
+    </update>
+    <delete id="deleteCollection">
+        delete from collection where collectionId = #{collectionId}
+    </delete>
+</mapper>

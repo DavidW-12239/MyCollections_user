@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.collections.mapper.UserMapper">
+    <insert id="addUser">
+        insert into user values(null, #{userName}, #{email}, #{password}, null, )
+    </insert>
+    <select id="getUser" resultType="com.collections.pojo.User">
+        select * from user where userName = #{userName} and password = #{password}
+    </select>
+    <select id="getUserByEmail" resultType="com.collections.pojo.User">
+        select * from user where email = #{email}
+    </select>
+    <select id="getUserById" resultType="com.collections.pojo.User">
+        select * from user where id = #{id}
+    </select>
+    <select id="getUserByName" resultType="com.collections.pojo.User">
+        select * from user where userName = #{userName}
+    </select>
+    <update id="updateUser">
+        update user set userName = #{userName}, email = #{email}, password = #{password}
+        where id = #{id}
+    </update>
+    <delete id="deleteUser">
+        delete from user where id = #{id}
+    </delete>
+</mapper>
