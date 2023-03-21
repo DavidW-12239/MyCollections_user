@@ -27,6 +27,18 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
+    public List<Collection> getCollectionsById(Long collectionId) {
+        Collection collection = collectionMapper.getCollectionById(collectionId);
+        List<Collection> collections;
+        if (collection.getParentCollectionId() == null){
+            collections = collectionMapper.getMainCollectionsByUser(collection.getUserId());
+        } else {
+            collections = collectionMapper.getSubCollectionsByCollection(collectionId);
+        }
+        return collections;
+    }
+
+    @Override
     public List<Collection> searchByTitle(String title) {
         List<Collection> collections = collectionMapper.getCollectionsByTitle(title);
         return collections;
@@ -38,35 +50,49 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public void addMainCollection(CollectionDTO collectionDTO, Long userId) {
+    public Collection addMainCollection(CollectionDTO collectionDTO, Long userId, String imagePath) {
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                collectionDTO.getImagePath(), collectionDTO.isOwned(), null);
+                imagePath, collectionDTO.getIsOwned(), null);
         collectionMapper.addCollection(collection);
+        return collection;
     }
 
     @Override
-    public void addSubCollection(CollectionDTO collectionDTO, Long parentCollectionId) {
+    public Collection addSubCollection(CollectionDTO collectionDTO, Long parentCollectionId, String imagePath) {
         Long userId = collectionMapper.getCollectionById(parentCollectionId).getUserId();
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                collectionDTO.getImagePath(), collectionDTO.isOwned(), parentCollectionId);
-        collectionMapper.addSubCollection(collection);
+                imagePath, collectionDTO.getIsOwned(), parentCollectionId);
+        collectionMapper.addCollection(collection);
+        return collection;
     }
 
     @Override
-    public void updateCollection(CollectionDTO collectionDTO, Long collectionId) {
+    public Collection updateCollectionContext(CollectionDTO collectionDTO, Long collectionId) {
         Collection collection = collectionMapper.getCollectionById(collectionId);
         collection.setTitle(collectionDTO.getTitle());
         collection.setWebsiteAddress(collectionDTO.getWebsiteAddress());
         collection.setDescription(collectionDTO.getDescription());
-        collection.setImagePath(collectionDTO.getImagePath());
-        collection.setOwned(collectionDTO.isOwned());
-        collectionMapper.updateCollection(collection);
+        collection.setIsOwned(collectionDTO.getIsOwned());
+        collectionMapper.updateCollectionContext(collection);
+        collection = collectionMapper.getCollectionById(collectionId);
+        return collection;
     }
 
     @Override
-    public void deleteCollection(Long collectionId) {
-        collectionMapper.deleteCollection(collectionId);
+    public Collection updateCollectionImage(String image, Long collectionId) {
+        Collection collection = collectionMapper.getCollectionById(collectionId);
+        collectionMapper.updateCollectionImage(image, collection.getCollectionId());
+        collection = collectionMapper.getCollectionById(collectionId);
+        return collection;
+    }
+
+    @Override
+    public void deleteCollectionById(Long collectionId) {
+        Collection collection = collectionMapper.getCollectionById(collectionId);
+        if (collection!=null){
+            collectionMapper.deleteCollection(collectionId);
+        }
     }
 }

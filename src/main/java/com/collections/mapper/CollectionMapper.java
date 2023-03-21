@@ -13,7 +13,7 @@ public interface CollectionMapper {
     List<Collection> getSubCollectionsByCollection(Long parentCollectionId);
     List<Collection> getCollectionsByTitle(String title);
     void addCollection(Collection collection);
-    void addSubCollection(Collection collection);
-    void updateCollection(Collection collection);
+    void updateCollectionContext(Collection collection);
+    void updateCollectionImage(String image, Long collectionId);
     void deleteCollection(Long collectionId);
 }

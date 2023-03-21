@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticateByEmail(String email, String password) {
-        User user = userMapper.getUserByName(email);
+        User user = userMapper.getUserByEmail(email);
         if (user!=null){
             if (user.getPassword().equals(password)){
                 return true;

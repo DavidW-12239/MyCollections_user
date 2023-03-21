@@ -28,7 +28,7 @@ public class UserController {
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
         User user = userService.getUserByEmail(userDTO.getEmail());
-        if (user != null) {
+        if (user != null && userService.authenticateByEmail(email, password)) {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("success", true);
             responseBody.put("userId", user.getId());

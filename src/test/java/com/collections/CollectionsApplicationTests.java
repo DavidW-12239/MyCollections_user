@@ -27,13 +27,11 @@ class CollectionsApplicationTests {
     CollectionService collectionService;
 
 
-
-
     @Test
     void testCollection(){
-        Collection collection = new Collection
-                (null, 2L, "kkk", "casd.com", "description2", "qwe", false, null);
-        collectionMapper.addCollection(collection);
+        List<Collection> lists = collectionMapper.getSubCollectionsByCollection(5L);
+        System.out.println(lists);
+
     }
 
 }

@@ -11,10 +11,12 @@ public interface CollectionService {
 
     List<Collection> getMainCollectionsByUser(Long userId);
     List<Collection> getSubCollectionsByCollection(Long parentCollectionId);
+    List<Collection> getCollectionsById(Long collectionId);
     List<Collection> searchByTitle(String title);
     Collection getCollectionByCollectionId(Long collectionId);
-    void addMainCollection(CollectionDTO collectionDTO, Long userId);
-    void addSubCollection(CollectionDTO collectionDTO, Long parentCollectionId);
-    void updateCollection(CollectionDTO collectionDTO, Long collectionId);
-    void deleteCollection(Long collectionId);
+    Collection addMainCollection(CollectionDTO collectionDTO, Long userId, String image);
+    Collection addSubCollection(CollectionDTO collectionDTO, Long parentCollectionId, String image);
+    Collection updateCollectionContext(CollectionDTO collectionDTO, Long collectionId);
+    Collection updateCollectionImage(String image, Long collectionId);
+    void deleteCollectionById(Long collectionId);
 }
