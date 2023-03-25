@@ -4,19 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.collections.mapper.CollectionMapper">
     <insert id="addCollection">
-        insert into collection values(null, #{userId}, #{title}, #{websiteAddress}, #{description}, #{image}, #{isOwned}, #{parentCollectionId})
+        insert into collection values(null, #{userId}, #{title}, #{websiteAddress}, #{description}, #{image}, #{isOwned}, #{parentCollectionId}, false)
     </insert>
     <select id="getCollectionById" resultType="com.collections.pojo.Collection">
         select * from collection where collectionId = #{collectionId}
     </select>
     <select id="getMainCollectionsByUser" resultType="com.collections.pojo.Collection">
-        select * from collection where userId = #{userId} and parentCollectionId is null
+        select * from collection where userId = #{userId} and parentCollectionId is null and isDeleted = false
     </select>
     <select id="getSubCollectionsByCollection" resultType="com.collections.pojo.Collection">
-        select * from collection where parentCollectionId = #{parentCollectionId}
+        select * from collection where parentCollectionId = #{parentCollectionId} and isDeleted = false
     </select>
     <select id="getCollectionsByTitle" resultType="com.collections.pojo.Collection">
-        select * from collection where title Like CONCAT('%',#{title},'%')
+        select * from collection where title Like CONCAT('%',#{title},'%') and isDeleted = false
+    </select>
+    <select id="getDeletedCollectionsByUser" resultType="com.collections.pojo.Collection">
+        select * from collection where userId = #{userId} and isDeleted = true
     </select>
     <update id="updateCollectionContext">
         update collection set title = #{title}, websiteAddress = #{websiteAddress}, description = #{description}, isOwned = #{isOwned}
@@ -26,7 +29,12 @@
         update collection set image = #{image}
         where collectionId = #{collectionId}
     </update>
-    <delete id="deleteCollection">
-        delete from collection where collectionId = #{collectionId}
-    </delete>
+    <update id="deleteCollectionById">
+        update collection set isDeleted = true
+        where collectionId = #{collectionId}
+    </update>
+    <update id="recoverCollection">
+        update collection set isDeleted = false
+        where collectionId = #{collectionId}
+    </update>
 </mapper>

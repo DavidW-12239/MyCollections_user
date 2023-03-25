@@ -1,6 +1,7 @@
 package com.collections.controller;
 
 import com.collections.dto.UserDTO;
+import com.collections.exception.NotFoundException;
 import com.collections.pojo.User;
 import com.collections.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,36 @@ public class UserController {
     public ResponseEntity<?> loginByEmail(@RequestBody UserDTO userDTO) {
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
-        User user = userService.getUserByEmail(userDTO.getEmail());
-        if (user != null && userService.authenticateByEmail(email, password)) {
+        try {
+            User user = userService.getUserByEmail(userDTO.getEmail());
+            if (userService.authenticateByEmail(email, password)) {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("success", true);
+                responseBody.put("userId", user.getId());
+                return ResponseEntity.ok(responseBody);
+            } else {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("success", false);
+                responseBody.put("message", "Incorrect email address or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+            }
+        } catch (NotFoundException e){
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("success", false);
+            responseBody.put("message", "User does not exist");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        }
+    }
+
+    @PostMapping("/signUp")
+    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO){
+        String userName = userDTO.getUserName();
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+        User user = new User(null, userName, email, password);
+        boolean signUp = userService.signUp(user);
+        if (signUp){
+            user = userService.getUserByEmail(email);
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("success", true);
             responseBody.put("userId", user.getId());
@@ -36,7 +65,7 @@ public class UserController {
         } else {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("success", false);
-            responseBody.put("message", "Invalid credentials");
+            responseBody.put("message", "User already exists. Please try another email or login.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
         }
     }

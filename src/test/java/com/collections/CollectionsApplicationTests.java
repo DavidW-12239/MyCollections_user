@@ -29,9 +29,9 @@ class CollectionsApplicationTests {
 
     @Test
     void testCollection(){
-        List<Collection> lists = collectionMapper.getSubCollectionsByCollection(5L);
-        System.out.println(lists);
-
+        User user = new User(null, "add", "email", "password");
+        userService.signUp(user);
+        System.out.println(user.getId());
     }
 
 }

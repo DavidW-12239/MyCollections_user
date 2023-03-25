@@ -20,6 +20,7 @@ public class Collection {
     String image;
     boolean isOwned;
     Long parentCollectionId;
+    boolean isDeleted;
 
     public boolean getIsOwned() {
         return isOwned;

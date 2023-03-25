@@ -1,10 +1,12 @@
 package com.collections.service.impl;
 
 import com.collections.dto.CollectionDTO;
+import com.collections.exception.NotEmptySubCollectionException;
 import com.collections.mapper.CollectionMapper;
 import com.collections.pojo.Collection;
 import com.collections.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class CollectionServiceImpl implements CollectionService {
         if (collection.getParentCollectionId() == null){
             collections = collectionMapper.getMainCollectionsByUser(collection.getUserId());
         } else {
-            collections = collectionMapper.getSubCollectionsByCollection(collectionId);
+            collections = collectionMapper.getSubCollectionsByCollection(collection.getParentCollectionId());
         }
         return collections;
     }
@@ -41,6 +43,12 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public List<Collection> searchByTitle(String title) {
         List<Collection> collections = collectionMapper.getCollectionsByTitle(title);
+        return collections;
+    }
+
+    @Override
+    public List<Collection> getDeletedCollectionsByUser(Long userId) {
+        List<Collection> collections = collectionMapper.getDeletedCollectionsByUser(userId);
         return collections;
     }
 
@@ -53,7 +61,7 @@ public class CollectionServiceImpl implements CollectionService {
     public Collection addMainCollection(CollectionDTO collectionDTO, Long userId, String imagePath) {
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                imagePath, collectionDTO.getIsOwned(), null);
+                imagePath, collectionDTO.getIsOwned(), null, false);
         collectionMapper.addCollection(collection);
         return collection;
     }
@@ -63,7 +71,7 @@ public class CollectionServiceImpl implements CollectionService {
         Long userId = collectionMapper.getCollectionById(parentCollectionId).getUserId();
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                imagePath, collectionDTO.getIsOwned(), parentCollectionId);
+                imagePath, collectionDTO.getIsOwned(), parentCollectionId, false);
         collectionMapper.addCollection(collection);
         return collection;
     }
@@ -90,9 +98,22 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public void deleteCollectionById(Long collectionId) {
+        collectionMapper.deleteCollectionById(collectionId);
+        List<Collection> subCollections = collectionMapper.getSubCollectionsByCollection(collectionId);
+        //recursion
+        if (subCollections.size()!=0){
+            for (Collection subCollection: subCollections){
+                Long subCollectionId = subCollection.getCollectionId();
+                deleteCollectionById(subCollectionId);
+            }
+        }
+    }
+
+    @Override
+    public void recoverCollection(Long collectionId) {
         Collection collection = collectionMapper.getCollectionById(collectionId);
         if (collection!=null){
-            collectionMapper.deleteCollection(collectionId);
+            collectionMapper.recoverCollection(collectionId);
         }
     }
 }

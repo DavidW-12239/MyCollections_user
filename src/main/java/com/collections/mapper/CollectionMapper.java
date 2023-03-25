@@ -12,8 +12,10 @@ public interface CollectionMapper {
     List<Collection> getMainCollectionsByUser(Long userId);
     List<Collection> getSubCollectionsByCollection(Long parentCollectionId);
     List<Collection> getCollectionsByTitle(String title);
+    List<Collection> getDeletedCollectionsByUser(Long userId);
     void addCollection(Collection collection);
     void updateCollectionContext(Collection collection);
     void updateCollectionImage(String image, Long collectionId);
-    void deleteCollection(Long collectionId);
+    void deleteCollectionById(Long collectionId);
+    void recoverCollection(Long collectionId);
 }

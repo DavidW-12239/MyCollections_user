@@ -76,10 +76,21 @@ public class CollectionController {
 
     @DeleteMapping ("/{collectionId}/deleteCollection")
     public ResponseEntity<?> deleteCollection(@PathVariable Long collectionId){
-        Long userId = collectionService.getCollectionByCollectionId(collectionId).getUserId();
         collectionService.deleteCollectionById(collectionId);
-        List<Collection> collections = collectionService.getMainCollectionsByUser(userId);
+        List<Collection> collections = collectionService.getCollectionsById(collectionId);
         return ResponseEntity.ok(collections);
+    }
+
+    @GetMapping("/{collectionId}/subCollectionsCount")
+    public ResponseEntity<?> getSubCollectionsCount(@PathVariable Long collectionId) {
+        List<Collection> subCollections = collectionService.getSubCollectionsByCollection(collectionId);
+        return ResponseEntity.ok(subCollections.size());
+    }
+
+    @GetMapping("/{userId}/deletedCollections")
+    public ResponseEntity<?> displayDeletedCollectionsByUser(@PathVariable Long userId){
+        List<Collection> deletedCollections = collectionService.getDeletedCollectionsByUser(userId);
+        return ResponseEntity.ok(deletedCollections);
     }
 
 
