@@ -1,5 +1,6 @@
 package com.collections;
 
+import com.collections.dto.UserDTO;
 import com.collections.mapper.CollectionMapper;
 import com.collections.pojo.Collection;
 import com.collections.pojo.User;
@@ -29,9 +30,9 @@ class CollectionsApplicationTests {
 
     @Test
     void testCollection(){
-        User user = new User(null, "add", "email", "password");
-        userService.signUp(user);
-        System.out.println(user.getId());
+        UserDTO userDto = new UserDTO("alice", "1@2", "23456");
+
+        System.out.println(userService.authenticateByEmail(userDto));
     }
 
 }

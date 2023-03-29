@@ -26,11 +26,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginByEmail(@RequestBody UserDTO userDTO) {
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
         try {
             User user = userService.getUserByEmail(userDTO.getEmail());
-            if (userService.authenticateByEmail(email, password)) {
+            if (userService.authenticateByEmail(userDTO)) {
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("success", true);
                 responseBody.put("userId", user.getId());
@@ -51,13 +49,9 @@ public class UserController {
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO){
-        String userName = userDTO.getUserName();
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
-        User user = new User(null, userName, email, password);
-        boolean signUp = userService.signUp(user);
+        boolean signUp = userService.signUp(userDTO);
         if (signUp){
-            user = userService.getUserByEmail(email);
+            User user = userService.getUserByEmail(userDTO.getEmail());
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("success", true);
             responseBody.put("userId", user.getId());

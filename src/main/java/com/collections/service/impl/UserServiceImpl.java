@@ -1,11 +1,13 @@
 package com.collections.service.impl;
 
+import com.collections.dto.UserDTO;
 import com.collections.exception.NotFoundException;
 import com.collections.mapper.UserMapper;
 import com.collections.pojo.User;
 import com.collections.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,11 +15,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Override
-    public boolean authenticateByEmail(String email, String password) {
+    public boolean authenticateByEmail(UserDTO userDTO) {
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
         User user = userMapper.getUserByEmail(email);
         if (user!=null){
-            if (user.getPassword().equals(password)){
+            if (passwordEncoder.matches(password, user.getPassword())){
                 return true;
             }
         }
@@ -25,8 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean signUp(User user) {
-        if (userMapper.getUserByEmail(user.getEmail())==null){
+    public boolean signUp(UserDTO userDTO) {
+        String userName = userDTO.getUserName();
+        String email = userDTO.getEmail();
+        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        if (userMapper.getUserByEmail(email)==null){
+            User user = new User(null, userName, email, encryptedPassword);
             userMapper.addUser(user);
             return true;
         }
