@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,10 +20,10 @@ public class Collection {
     Long parentCollectionId;
     boolean isDeleted;
 
+    //do not delete
     public boolean getIsOwned() {
         return isOwned;
     }
-
     public void setIsOwned(boolean owned) {
         isOwned = owned;
     }

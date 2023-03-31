@@ -18,15 +18,22 @@
     <select id="getCollectionsByTitle" resultType="com.collections.pojo.Collection">
         select * from collection where title Like CONCAT('%',#{title},'%') and isDeleted = false
     </select>
+    <select id="getCollectionsByTitleAndUser" resultType="com.collections.pojo.Collection">
+        select * from collection where title Like CONCAT('%',#{title},'%') and userId = #{userId} and isDeleted = false
+    </select>
     <select id="getDeletedCollectionsByUser" resultType="com.collections.pojo.Collection">
         select * from collection where userId = #{userId} and isDeleted = true
     </select>
     <update id="updateCollectionContext">
-        update collection set title = #{title}, websiteAddress = #{websiteAddress}, description = #{description}, isOwned = #{isOwned}
+        update collection set title = #{title}, websiteAddress = #{websiteAddress}, description = #{description}
         where collectionId = #{collectionId}
     </update>
     <update id="updateCollectionImage">
         update collection set image = #{image}
+        where collectionId = #{collectionId}
+    </update>
+    <update id="updateCollectionIsOwned">
+        update collection set isOwned = #{isOwned}
         where collectionId = #{collectionId}
     </update>
     <update id="deleteCollectionById">

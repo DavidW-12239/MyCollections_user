@@ -47,6 +47,12 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
+    public List<Collection> getCollectionsByTitleAndId(String title, Long userId) {
+        List<Collection> collections = collectionMapper.getCollectionsByTitleAndUser(title, userId);
+        return collections;
+    }
+
+    @Override
     public List<Collection> getDeletedCollectionsByUser(Long userId) {
         List<Collection> collections = collectionMapper.getDeletedCollectionsByUser(userId);
         return collections;
@@ -90,9 +96,15 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Collection updateCollectionImage(String image, Long collectionId) {
+        collectionMapper.updateCollectionImage(image, collectionId);
         Collection collection = collectionMapper.getCollectionById(collectionId);
-        collectionMapper.updateCollectionImage(image, collection.getCollectionId());
-        collection = collectionMapper.getCollectionById(collectionId);
+        return collection;
+    }
+
+    @Override
+    public Collection updateCollectionIsOwned(boolean isOwned, Long collectionId) {
+        collectionMapper.updateCollectionIsOwned(isOwned, collectionId);
+        Collection collection = collectionMapper.getCollectionById(collectionId);
         return collection;
     }
 

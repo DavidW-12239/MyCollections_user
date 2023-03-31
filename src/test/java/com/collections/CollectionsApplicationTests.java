@@ -30,9 +30,7 @@ class CollectionsApplicationTests {
 
     @Test
     void testCollection(){
-        UserDTO userDto = new UserDTO("alice", "1@2", "23456");
-
-        System.out.println(userService.authenticateByEmail(userDto));
+        collectionMapper.updateCollectionIsOwned(true, 127L);
     }
 
 }

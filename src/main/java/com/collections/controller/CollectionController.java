@@ -18,8 +18,6 @@ import java.util.List;
 @RequestMapping("/collection")
 @CrossOrigin(origins = "http://localhost:3000")
 public class CollectionController {
-    private static final String UPLOAD_DIR = "E:\\React Project\\my-app\\public\\images";
-
     @Autowired
     CollectionService collectionService;
 
@@ -36,6 +34,13 @@ public class CollectionController {
     public ResponseEntity<?> displaySubCollections(@PathVariable Long collectionId){
         List<Collection> subCollections = collectionService.getSubCollectionsByCollection(collectionId);
         return ResponseEntity.ok(subCollections);
+    }
+
+    @GetMapping("/{userId}/collections")
+    public ResponseEntity<?> displayCollectionsByTitleAndUserId(@RequestParam("title") String title,
+                                                                @PathVariable Long userId){
+        List<Collection> collections = collectionService.getCollectionsByTitleAndId(title, userId);
+        return ResponseEntity.ok(collections);
     }
 
     @PostMapping("/{userId}/addMainCollection")
@@ -71,6 +76,12 @@ public class CollectionController {
     public ResponseEntity<?> updateCollectionImage(@PathVariable Long collectionId, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         String imagePath = Utils.uploadImage(image);
         Collection collection = collectionService.updateCollectionImage(imagePath, collectionId);
+        return ResponseEntity.ok(collection);
+    }
+
+    @PostMapping("/{collectionId}/updateCollectionIsOwned")
+    public ResponseEntity<?> updateCollectionIsOwned(@PathVariable Long collectionId, @RequestParam boolean isOwned){
+        Collection collection = collectionService.updateCollectionIsOwned(isOwned, collectionId);
         return ResponseEntity.ok(collection);
     }
 
