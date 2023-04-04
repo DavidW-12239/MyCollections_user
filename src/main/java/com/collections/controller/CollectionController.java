@@ -85,6 +85,12 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
+    @PostMapping("/{collectionId}/updateCollectionIsPublic")
+    public ResponseEntity<?> updateCollectionIsPublic(@PathVariable Long collectionId, @RequestParam boolean isPublic){
+        Collection collection = collectionService.updateCollectionIsPublic(isPublic, collectionId);
+        return ResponseEntity.ok(collection);
+    }
+
     @DeleteMapping ("/{collectionId}/deleteCollection")
     public ResponseEntity<?> deleteCollection(@PathVariable Long collectionId){
         collectionService.deleteCollectionById(collectionId);

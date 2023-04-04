@@ -27,10 +27,11 @@ class CollectionsApplicationTests {
     @Autowired
     CollectionService collectionService;
 
-
     @Test
     void testCollection(){
-        collectionMapper.updateCollectionIsOwned(true, 127L);
+        Collection collection = collectionService.updateCollectionIsPublic(true, 128L);
+        System.out.println(collection.getCollectionId());
+
     }
 
 }

@@ -18,6 +18,7 @@ public class Collection {
     String image;
     boolean isOwned;
     Long parentCollectionId;
+    boolean isPublic;
     boolean isDeleted;
 
     //do not delete
@@ -26,5 +27,13 @@ public class Collection {
     }
     public void setIsOwned(boolean owned) {
         isOwned = owned;
+    }
+
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

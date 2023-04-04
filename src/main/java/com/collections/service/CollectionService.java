@@ -21,6 +21,7 @@ public interface CollectionService {
     Collection updateCollectionContext(CollectionDTO collectionDTO, Long collectionId);
     Collection updateCollectionImage(String image, Long collectionId);
     Collection updateCollectionIsOwned(boolean isOwned, Long collectionId);
+    Collection updateCollectionIsPublic(boolean isPublic, Long collectionId);
     void deleteCollectionById(Long collectionId);
     void recoverCollection(Long collectionId);
 }

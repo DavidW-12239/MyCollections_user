@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -15,6 +14,7 @@ public class CollectionDTO {
     private String websiteAddress;
     private String description;
     private boolean isOwned;
+    private boolean isPublic;
     private String image;
 
     public boolean getIsOwned() {
@@ -26,4 +26,11 @@ public class CollectionDTO {
     }
 
 
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 }

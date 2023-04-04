@@ -67,7 +67,7 @@ public class CollectionServiceImpl implements CollectionService {
     public Collection addMainCollection(CollectionDTO collectionDTO, Long userId, String imagePath) {
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                imagePath, collectionDTO.getIsOwned(), null, false);
+                imagePath, collectionDTO.getIsOwned(), null, collectionDTO.getIsPublic(), false);
         collectionMapper.addCollection(collection);
         return collection;
     }
@@ -77,7 +77,7 @@ public class CollectionServiceImpl implements CollectionService {
         Long userId = collectionMapper.getCollectionById(parentCollectionId).getUserId();
         Collection collection = new Collection(null, userId, collectionDTO.getTitle(),
                 collectionDTO.getWebsiteAddress(), collectionDTO.getDescription(),
-                imagePath, collectionDTO.getIsOwned(), parentCollectionId, false);
+                imagePath, collectionDTO.getIsOwned(), parentCollectionId, collectionDTO.getIsPublic(), false);
         collectionMapper.addCollection(collection);
         return collection;
     }
@@ -105,6 +105,21 @@ public class CollectionServiceImpl implements CollectionService {
     public Collection updateCollectionIsOwned(boolean isOwned, Long collectionId) {
         collectionMapper.updateCollectionIsOwned(isOwned, collectionId);
         Collection collection = collectionMapper.getCollectionById(collectionId);
+        return collection;
+    }
+
+    @Override
+    public Collection updateCollectionIsPublic(boolean isPublic, Long collectionId) {
+        collectionMapper.updateCollectionIsPublic(isPublic, collectionId);
+        Collection collection = collectionMapper.getCollectionById(collectionId);
+        List<Collection> subCollections = collectionMapper.getSubCollectionsByCollection(collectionId);
+        //recursion
+        if (subCollections.size()!=0){
+            for (Collection subCollection: subCollections){
+                Long subCollectionId = subCollection.getCollectionId();
+                updateCollectionIsPublic(isPublic, subCollectionId);
+            }
+        }
         return collection;
     }
 

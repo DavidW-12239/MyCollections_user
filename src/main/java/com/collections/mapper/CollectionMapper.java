@@ -18,6 +18,7 @@ public interface CollectionMapper {
     void updateCollectionContext(Collection collection);
     void updateCollectionImage(String image, Long collectionId);
     void updateCollectionIsOwned(boolean isOwned, Long collectionId);
+    void updateCollectionIsPublic(boolean isPublic, Long collectionId);
     void deleteCollectionById(Long collectionId);
     void recoverCollection(Long collectionId);
 }
