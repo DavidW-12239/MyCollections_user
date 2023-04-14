@@ -1,5 +1,6 @@
 package com.collections.pojo;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,12 +10,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "user")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String userName;
-    String email;
-    String password;
 
+    @Column(name = "username")
+    String userName;
+
+    @Column(name = "email")
+    String email;
+
+    @Column(name = "password")
+    String password;
 
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 package com.collections.pojo;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +10,39 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name="collection")
 public class Collection {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long collectionId;
+
+    @Column(name = "userId")
     Long userId;
+
+    @Column(name = "title")
     String title;
+
+    @Column(name = "websiteAddress")
     String websiteAddress;
+
+    @Column(name = "description")
     String description;
+
+    @Column(name = "image")
     String image;
+
+    @Column(name = "isOwned")
     boolean isOwned;
+
+    @Column(name = "parentCollectionId")
     Long parentCollectionId;
+
+    @Column(name = "isPublic")
     boolean isPublic;
-    boolean isDeleted;
+
+    @Column(name = "isDeleted")
+    boolean isDeleted = false;
 
     //do not delete
     public boolean getIsOwned() {
@@ -33,7 +56,7 @@ public class Collection {
         return isPublic;
     }
 
-    public void setPublic(boolean isPublic) {
+    public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
 }
