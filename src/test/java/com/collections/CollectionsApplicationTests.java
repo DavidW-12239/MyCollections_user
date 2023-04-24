@@ -34,7 +34,9 @@ class CollectionsApplicationTests {
 
     @Test
     public void getSpringVersion() {
-        System.out.println(userController.getUserInfo(13L));
+        List<Collection> list = collectionRepository.findByTitleContainingAndIsDeletedFalse("123");
+        System.out.println(list.size());
+
     }
 
 }

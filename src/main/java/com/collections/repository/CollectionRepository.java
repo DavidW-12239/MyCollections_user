@@ -1,5 +1,6 @@
 package com.collections.repository;
 
+
 import com.collections.pojo.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
