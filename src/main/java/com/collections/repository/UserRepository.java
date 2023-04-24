@@ -2,12 +2,13 @@ package com.collections.repository;
 
 import com.collections.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findUserByUserNameAndPassword(String userName, String password);
+    User findUserByUsernameAndPassword(String username, String password);
     User findUserById(Long id);
     User findUserByEmail(String email);
-    User findUserByUserName(String userName);
+    User findUserByUsername(String username);
     void deleteUserById(Long id);
 }

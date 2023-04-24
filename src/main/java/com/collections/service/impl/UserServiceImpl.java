@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signUp(UserDTO userDTO) {
-        String userName = userDTO.getUserName();
+        String userName = userDTO.getUsername();
         String email = userDTO.getEmail();
         String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
         if (userDao.findUserByEmail(email)==null){
@@ -48,9 +48,9 @@ public class UserServiceImpl implements UserService {
     public boolean updateInfo(User user) {
         User oldUser = userDao.findUserById(user.getId());
         String preEmail = oldUser.getEmail();
-        String preName = oldUser.getUserName();
+        String preName = oldUser.getUsername();
         String newEmail = user.getEmail();
-        String newName = user.getUserName();
+        String newName = user.getUsername();
         if (preEmail.equals(newEmail) && userDao.findUserByEmail(newEmail)!=null){
             return false;
         }
